@@ -67,8 +67,7 @@
             let old_y = Math.floor(index / old_w);
             let new_x = Math.floor(old_x / ratio_w);
             let new_y = Math.floor(old_y / ratio_h);
-            return [new_x, new_y];
-            // return new_y *;
+            return new_y * new_w + new_x;
         }
 
         function getGreys(imgData) {
@@ -78,17 +77,14 @@
                         acc[0].push(val);
                         acc[1]++;
                         return acc;
-                        // return [[val, ...acc], i + 1];
                     }
                     else {
                         let b = acc[0].pop();
                         let g = acc[0].pop();
                         let r = acc[0].pop();
-                        // let [b, g, r, ...rest] = acc;
                         acc[0].push(rgbToGrey(r, g, b));
                         acc[1]++;
                         return acc;
-                        // return ([[rgbToGrey(r, g, b), ...rest], i + 1]);
                     }
                 },
                 [[], 0]
@@ -100,28 +96,24 @@
             inv_ctx.drawImage(video, 0, 0, w, h);
             let greys = getGreys(inv_ctx.getImageData(0, 0, w, h).data);
 
-            let greysLowRes = {};
+            let avgGrey = Array.from(Array(ascii_w * ascii_h)).map(x => []);
             for (let i = 0; i < greys.length; i++) {
-                let [x, y] = newIndex(i, w, h, ascii_ratio, ascii_ratio, ascii_w, ascii_h);
-                let old = greysLowRes[[x, y]];
-                greysLowRes[[x, y]] = old ? old.concat(greys[i]) : [greys[i]];
+                let newInd = newIndex(i, w, h, ascii_ratio, ascii_ratio, ascii_w, ascii_h);
+                avgGrey[newInd].push(greys[i]);
             }
 
-            let avgGrey = {};
-            Object.keys(greysLowRes).forEach(k => {
-                avgGrey[k] = Math.floor(greysLowRes[k].reduce((acc, v) => acc + v, 0) / greysLowRes[k].length);
-            });
+            avgGrey = avgGrey.map(x => x.reduce((acc, v) => acc + v, 0) / x.length);
 
             let ascii_image = "";
             let mini_view = [];
             for (let y = 0; y < ascii_h; y++) {
                 let line = "";
                 for (let x = 0; x < ascii_w; x++) {
-                    mini_view.push(avgGrey[[x, y]]);
-                    mini_view.push(avgGrey[[x, y]]);
-                    mini_view.push(avgGrey[[x, y]]);
+                    mini_view.push(avgGrey[x + y * ascii_w]);
+                    mini_view.push(avgGrey[x + y * ascii_w]);
+                    mini_view.push(avgGrey[x + y * ascii_w]);
                     mini_view.push(255);
-                    line += ascii_greys[Math.floor(avgGrey[[x, y]] / ascii_step)];
+                    line += ascii_greys[Math.floor(avgGrey[x + y * ascii_w] / ascii_step)];
                 }
                 ascii_image += line + "</br>";
             }
