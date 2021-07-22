@@ -2,7 +2,7 @@
 
 <body>
     <h1>ASCII CAMERA</h1>
-    <video id="myVidPlayer" muted autoplay></video>
+    <video id="myVidPlayer" muted autoplay hidden></video>
     <canvas id="captured" hidden></canvas>
     <canvas id="invisible" hidden></canvas>
     <canvas id="mini"></canvas>
@@ -69,6 +69,7 @@
         }
 
         function drawAscii() {
+            console.log(video.readyState);
             inv_ctx.drawImage(video, 0, 0, w, h);
             let greys = getGreys(inv_ctx.getImageData(0, 0, w, h).data);
 
@@ -113,14 +114,14 @@
 
             drawAscii();
             fps.frames++;
-            setTimeout(snapshot, 500);
+            setTimeout(snapshot, 10);
         }
 
         window.navigator.mediaDevices.getUserMedia({ video: true, audio: true })
             .then(stream => {
                 video.srcObject = stream;
                 video.onloadedmetadata = (e) => {
-                    // video.play();
+                    video.play();
 
                     //new
                     w = video.videoWidth;
