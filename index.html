@@ -1,25 +1,9 @@
 <html>
 
 <body>
-    <h1>test</h1>
-    <div style="display: table">
-        <div style="display: table-row">
-            <div style="display: table-cell;">
-                </br>
-                </br>
-                </br>
-                </br>
-                <video id="myVidPlayer" muted autoplay></video>
-            </div>
-
-            <div style="display: table-cell;">
-                <h6>Captured snapshot</h6>
-                <button onclick="drawAscii()">Snapshot</button>
-                <!-- <canvas id="captured" style="display: block;"></canvas> -->
-                <canvas id="captured" hidden></canvas>
-            </div>
-        </div>
-    </div>
+    <h1>ASCII CAMERA</h1>
+    <video id="myVidPlayer" muted autoplay></video>
+    <canvas id="captured" hidden></canvas>
     <canvas id="invisible" hidden></canvas>
     <canvas id="mini"></canvas>
     <div id="fps">0</div>
@@ -38,7 +22,7 @@
         let ascii_div = document.getElementById("ascii");
         let ascii_w, ascii_h;
         let ascii_ratio = 4;
-        let ascii_greys = Array.from("@xo*;,-. ");
+        let ascii_greys = Array.from("@xo*:,-. ");
         // let ascii_greys = Array.from(" .:-=+*#%@");
         // let ascii_greys = Array.from(" .:-=+*#%@").reverse();
         // let ascii_greys = Array.from("X ");
