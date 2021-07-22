@@ -2,7 +2,7 @@
 
 <body>
     <h1>ASCII CAMERA</h1>
-    <video id="myVidPlayer" muted autoplay hidden></video>
+    <video id="myVidPlayer" muted autoplay></video>
     <canvas id="captured" hidden></canvas>
     <canvas id="invisible" hidden></canvas>
     <canvas id="mini"></canvas>
@@ -113,6 +113,7 @@
 
             drawAscii();
             fps.frames++;
+            setTimeout(snapshot, 10);
         }
 
         window.navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -136,7 +137,8 @@
                     invisible_canvas.width = w;
                     invisible_canvas.height = h;
 
-                    window.setInterval(snapshot, 10);
+                    // window.setInterval(snapshot, 10);
+                    snapshot();
                 };
             })
             .catch(error => {
